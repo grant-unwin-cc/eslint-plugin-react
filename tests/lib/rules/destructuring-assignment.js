@@ -890,6 +890,24 @@ ruleTester.run('destructuring-assignment', rule, {
       errors: [
         { message: 'Must never use destructuring useContext assignment' },
       ],
+    },
+    {
+      code: `
+        export function Autocomplete(props): JSX.Element {
+          const { label, errorMessage, onChange, value, options, inputProps, placeholder } = props;
+          
+          const fieldProps = { ...props };
+          delete fieldProps.errorMessage;
+          delete fieldProps.inputProps;
+
+          return (<span>{label}</span>)
+        }
+      `,
+      options: ['always', { destructureInSignature: 'always' }],
+      settings: { react: { version: '18.2.0' } },
+      errors: [
+        { message: 'Must destructure props in the function signature.' },
+      ],
     }
   )),
 });
